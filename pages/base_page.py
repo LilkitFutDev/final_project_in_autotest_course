@@ -1,4 +1,5 @@
 from selenium.common.exceptions import NoSuchElementException
+import math
 
 class BasePage():
     def __init__ (self,browser,url,timeout=10):
@@ -12,6 +13,8 @@ class BasePage():
             except (NoSuchElementException):
                 return False
             return True
+
+
 
     def open(self):
         self.browser.get(self.url)

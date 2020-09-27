@@ -33,3 +33,4 @@ def test_should_be_login_url(browser):
     page = LoginPage(browser, link)
     page.open()
     page.should_be_login_url()
+
