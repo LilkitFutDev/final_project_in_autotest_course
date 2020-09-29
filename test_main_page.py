@@ -1,3 +1,5 @@
+from .pages.base_page import BasePage
+from .pages.basket_page import BasketPage
 from .pages.main_page import MainPage
 from .pages.login_page import LoginPage
 
@@ -33,4 +35,14 @@ def test_should_be_login_url(browser):
     page = LoginPage(browser, link)
     page.open()
     page.should_be_login_url()
+
+def test_guest_cant_see_product_in_basket_opened_from_main_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/ru"
+    page = BasePage(browser,link)
+    page.open()
+    page.go_to_busket()
+    assert_on_busket = BasketPage(browser,link)
+    assert_on_busket.should_not_be_items_in_basket()
+    assert_on_busket.should_be_inscription_about_null_basket()
+
 
