@@ -11,6 +11,8 @@ from final_project_in_autotest_course.pages.locators import BasePageLocators, Ba
 
 
 class BasePage():
+    email = str(time.time()) + "@fakemail.org"
+    password = "AM7zewrhffewfi7"
     def __init__ (self,browser,url,timeout=10):
         self.browser = browser
         self.url = url
@@ -66,6 +68,10 @@ class BasePage():
     def go_to_busket(self):
        link = self.browser.find_element(*Basket.BASKET)
        link.click()
+
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
+                                                                     " probably unauthorised user"
 
     def open(self):
         self.browser.get(self.url)
