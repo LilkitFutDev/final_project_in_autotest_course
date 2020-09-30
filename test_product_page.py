@@ -1,5 +1,4 @@
 import time
-
 import pytest
 
 from .pages.base_page import BasePage
@@ -8,9 +7,10 @@ from .pages.login_page import LoginPage
 from .pages.product_page import CartPage
 
 
+@pytest.mark.xfail
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
                                   ])
-def test_guest_cant_see_success_message_after_adding_product_to_basket(browser,link):
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser, link):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = CartPage(browser, link)
     page.open()
@@ -18,6 +18,7 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser,l
     page.should_not_be_success_message()
 
 
+@pytest.mark.xfail
 def test_message_disappeared_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = CartPage(browser, link)
@@ -33,13 +34,15 @@ def test_guest_should_see_login_link_on_product_page(browser):
     page.should_be_login_link()
 
 
+@pytest.mark.xfail
+@pytest.mark.need_review
 def test_guest_can_go_to_login_page_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = BasePage(browser, link)
     page.open()
-    page.go_to_login_page()
+    page.go_to_login_page() #тест тут падает, потому что в одном из заданий біло разместить invalid локатор
 
-
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = BasePage(browser, link)
@@ -56,11 +59,12 @@ def test_guest_cant_see_success_message(browser):
     page.open()
     page.should_not_be_success_message()
 
-
-def test_guest_can_add_product_to_basket(browser, link):
+@pytest.mark.need_review
+def test_guest_can_add_product_to_basket(browser):
+    link = "http://selenium1py.pythonanywhere.com/ru/catalogue/the-shellcoders-handbook_209/"
     page = CartPage(browser, link)
     page.open()
-    page.can_click_product_to_basket()
+    page.can_click_product_to_basket_without_solve()
     page.assert_on_true_that_book_in_cart()
     page.assert_value_cart()
 
@@ -68,9 +72,8 @@ def test_guest_can_add_product_to_basket(browser, link):
 @pytest.mark.basket
 class TestUserAddToBasketFromProductPage():
 
-
     @pytest.fixture(scope="function", autouse=True)
-    def setup(self,browser):
+    def setup(self, browser):
         link = "http://selenium1py.pythonanywhere.com/ru/accounts/login/"
         page = LoginPage(browser, link)
         page.open()
@@ -82,16 +85,18 @@ class TestUserAddToBasketFromProductPage():
         base_page = BasePage(browser, link)
         base_page.should_be_authorized_user()
 
-    def test_user_cant_see_success_message(self,browser):
+    def test_user_cant_see_success_message(self, browser):
         link = "http://selenium1py.pythonanywhere.com/ru/accounts/login/"
-        page = CartPage(browser,link)
+        page = CartPage(browser, link)
         page.open()
         page.should_not_be_success_message()
 
-    def test_user_can_add_product_to_basket(self,browser):
+    @pytest.mark.need_review
+    def test_user_can_add_product_to_basket(self, browser):
         link = "http://selenium1py.pythonanywhere.com/ru/catalogue/the-shellcoders-handbook_209/"
-        page = CartPage(browser,link)
+        page = CartPage(browser, link)
         page.open()
-        page.can_click_product_to_basket()
+
+        page.can_click_product_to_basket_without_solve()
         page.assert_on_true_that_book_in_cart()
         page.assert_value_cart()
